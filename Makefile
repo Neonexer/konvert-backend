@@ -19,3 +19,15 @@ env-cleanup:
 		else \
 			echo "Очистка окружения отменена"; \
 		fi
+
+migrate-create:
+	@if [ -z "$(seq)" ]; then \
+		echo "Отсутствует необходимый параметр seq. Пример: make migrate-create seq=init"; \
+		exit 1; \
+	fi; \
+	docker compose run --rm konvert-postgres-migrate \
+		create \
+		-ext sql \
+		-dir migrations \
+		-seq "$(seq)"
+
