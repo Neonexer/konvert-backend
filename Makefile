@@ -5,10 +5,10 @@ export PROJECT_ROOT=$(shell pwd)
 
 
 env-up:
-	docker compose up -d konvert-postgres
+	@docker compose up -d konvert-postgres
 
 env-down:
-	docker compose down konvert-postgres
+	@docker compose down konvert-postgres
 
 env-cleanup:
 	@read -p "Очистить все volume файлы окружения? Опасность утери данных. [y/N]: " ans; \
@@ -31,3 +31,18 @@ migrate-create:
 		-dir migrations \
 		-seq "$(seq)"
 
+migrate-up:
+	@make migrate-action action=up
+
+migrate-down:
+	@make migrate-action action=up
+
+migrate-action:
+	@if [ -z "$(action)" ]; then \
+		echo "Отсутствует необходимый параметр action. Пример: make migrate-action action=init"; \
+		exit 1; \
+	fi; \
+	docker compose run --rm konvert-postgres-migrate \
+		-path /migrations \
+		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@konvert-postgres:5432/${POSTGRES_DB}?sslmode=disable \
+		"$(action)"
