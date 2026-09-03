@@ -20,6 +20,12 @@ env-cleanup:
 			echo "Очистка окружения отменена"; \
 		fi
 
+env-port-forward:
+	@docker compose up -d port-forwarder
+
+env-port-close:
+	@docker compose down port-forwarder
+
 migrate-create:
 	@if [ -z "$(seq)" ]; then \
 		echo "Отсутствует необходимый параметр seq. Пример: make migrate-create seq=init"; \
@@ -35,7 +41,7 @@ migrate-up:
 	@make migrate-action action=up
 
 migrate-down:
-	@make migrate-action action=up
+	@make migrate-action action=down
 
 migrate-action:
 	@if [ -z "$(action)" ]; then \
