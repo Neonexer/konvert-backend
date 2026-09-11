@@ -38,7 +38,7 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         password: ${{ secrets.VPS_PASSWORD }}
-        port: ${{ secrets.VPS_PORT || 22 }}
+        port: 22
         script_stop: true
         script: |
           set -eu
