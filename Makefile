@@ -52,3 +52,8 @@ migrate-action:
 		-path /migrations \
 		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@konvert-postgres:5432/${POSTGRES_DB}?sslmode=disable \
 		"$(action)"
+
+konvert-run:
+	@export LOGGER_FOLDER=$(PROJECT_ROOT)/out/logs && \
+	go mod tidy && \
+	go run cmd/server/main.go

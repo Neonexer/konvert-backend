@@ -3,12 +3,16 @@ CREATE SCHEMA konvert;
 CREATE TABLE konvert.users (
   id SERIAL PRIMARY KEY,
   version BIGINT NOT NULL DEFAULT 1,
-  full_name VARCHAR(100) NOT NULL CHECK(char_length(full_name) BETWEEN 2 AND 100),
-  phone_number VARCHAR(15) CHECK(
-    phone_number ~ '^\+[0-9]+$'
-    AND
-    char_length(phone_number) BETWEEN 10 AND 15
+  -- full_name VARCHAR(100) NOT NULL CHECK(char_length(full_name) BETWEEN 2 AND 100),
+  email VARCHAR(100) NOT NULL UNIQUE CHECK(
+    email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
   ),
+  password VARCHAR(255) NOT NULL,
+  -- phone_number VARCHAR(15) CHECK(
+  --   phone_number ~ '^\+[0-9]+$'
+  --   AND
+  --   char_length(phone_number) BETWEEN 10 AND 15
+  -- ),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
