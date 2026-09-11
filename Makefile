@@ -57,3 +57,9 @@ konvert-run:
 	@export LOGGER_FOLDER=$(PROJECT_ROOT)/out/logs && \
 	go mod tidy && \
 	go run cmd/server/main.go
+
+konvert-deploy:
+	@docker compose up -d --build konvert-app
+
+ps:
+	@docker compose ps
