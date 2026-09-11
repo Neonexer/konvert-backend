@@ -19,11 +19,11 @@ checkout до `origin/main`, генерирует Swagger и запускает 
 может выполнять Docker-команды.
 
 Добавьте в настройках репозитория `Settings -> Secrets and variables -> Actions`
-следующие secrets:
+следующие Repository variables:
 
-- `VPS_HOST` - адрес VPS;
+- `VPS_HOST` - адрес VPS, например `203.0.113.10`;
 - `VPS_PORT` - SSH-порт, необязательно, по умолчанию `22`;
 - `VPS_USER` - пользователь SSH;
-- `VPS_SSH_KEY` - приватный ключ без passphrase или ключ, настроенный для
-  non-interactive использования;
 - `VPS_APP_DIR` - абсолютный путь к checkout репозитория на VPS.
+
+В Repository secrets добавьте только `VPS_PASSWORD`.
