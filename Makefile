@@ -64,5 +64,13 @@ konvert-deploy:
 konvert-undeploy:
 	@docker compose down konvert-app
 
+swagger-gen:
+	@docker compose run --rm swagger \
+		init \
+		-g cmd/server/main.go \
+		-o docs/swagger \
+		--parseInternal \
+		--parseDependency
+
 ps:
 	@docker compose ps

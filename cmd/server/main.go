@@ -12,8 +12,15 @@ import (
 	core_http_server "github.com/neonexer/konvert-backend/internal/core/transport/http/server"
 	"github.com/neonexer/konvert-backend/internal/user"
 	"go.uber.org/zap"
+
+	_ "github.com/neonexer/konvert-backend/docs/swagger"
 )
 
+// @title Konvert API
+// @version 1.0
+// @description API для приложения Конверт. Для управления личными финансами
+// @host 127.0.0.1:5050
+// @BasePath /api/v1
 func main() {
 	ctx, cancel := signal.NotifyContext(
 		context.Background(),
@@ -45,6 +52,7 @@ func main() {
 		core_http_middleware.Trace(),
 	)
 	httpServer.RegisterAPIRouters(apiVersionRouter)
+	httpServer.RegisterSwagger()
 
 	if err := httpServer.Run(ctx); err != nil {
 		logger.Error("HTTP server run error", zap.Error(err))

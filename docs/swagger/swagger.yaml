@@ -1,0 +1,56 @@
+basePath: /api/v1
+definitions:
+  internal_user.RegisterRequest:
+    properties:
+      email:
+        example: john.doe@example.com
+        type: string
+      password:
+        example: securepassword123
+        type: string
+    type: object
+  internal_user.UserResponse:
+    properties:
+      email:
+        example: john.doe@example.com
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+host: 127.0.0.1:5050
+info:
+  contact: {}
+  description: API для приложения Конверт. Для управления личными финансами
+  title: Konvert API
+  version: "1.0"
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Создание нового пользователя в системе
+      parameters:
+      - description: Тело запроса для регистрации пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_user.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Успешно созданный пользователь
+          schema:
+            $ref: '#/definitions/internal_user.UserResponse'
+        "400":
+          description: Ошибка валидации данных
+          schema: {}
+      summary: Создание пользователя
+      tags:
+      - users
+swagger: "2.0"

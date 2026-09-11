@@ -14,18 +14,27 @@ type ResponseWriter struct {
 func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
 	return &ResponseWriter{
 		ResponseWriter: w,
-		statusCode: StatusCodeUninitialized,
+		statusCode:     StatusCodeUninitialized,
 	}
 }
 
-func (w *ResponseWriter) WriteHeader(statusCode int) {
-	w.ResponseWriter.WriteHeader(statusCode)
-	w.statusCode = statusCode
+func (rw *ResponseWriter) WriteHeader(statusCode int) {
+	rw.ResponseWriter.WriteHeader(statusCode)
+	rw.statusCode = statusCode
 }
 
-func (w *ResponseWriter) GetStatusCodeOrPanic() int {
-	if w.statusCode == StatusCodeUninitialized {
+// TODO:
+func (rw *ResponseWriter) Write(body []byte) (int, error) {
+	if rw.statusCode == StatusCodeUninitialized {
+		rw.WriteHeader(http.StatusOK)
+	}
+
+	return rw.ResponseWriter.Write(body)
+}
+
+func (rw *ResponseWriter) GetStatusCodeOrPanic() int {
+	if rw.statusCode == StatusCodeUninitialized {
 		panic("no status code set")
 	}
-	return w.statusCode
+	return rw.statusCode
 }

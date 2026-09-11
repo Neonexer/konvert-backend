@@ -9,6 +9,10 @@ import (
 	core_logger "github.com/neonexer/konvert-backend/internal/core/logger"
 	core_http_middleware "github.com/neonexer/konvert-backend/internal/core/transport/http/middleware"
 	"go.uber.org/zap"
+
+	"github.com/swaggo/http-swagger"
+
+	docs "github.com/neonexer/konvert-backend/docs/swagger"
 )
 
 type HTTPServer struct {
@@ -41,6 +45,24 @@ func (h *HTTPServer) RegisterAPIRouters(routers ...*APIVersionRouter) {
 			http.StripPrefix(prefix, router),
 		)
 	}
+}
+
+func (s *HTTPServer) RegisterSwagger() {
+	s.mux.Handle(
+		"/swagger/", 
+		httpSwagger.Handler(
+			httpSwagger.URL("/swagger/doc.json"),
+		),
+	)
+
+	s.mux.HandleFunc(
+		"/swagger/doc.json",
+		func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte(docs.SwaggerInfo.ReadDoc()))
+		},
+	)
 }
 
 func (h *HTTPServer) Run(ctx context.Context) error {
