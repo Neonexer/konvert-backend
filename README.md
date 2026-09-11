@@ -1,6 +1,7 @@
 # Бэкенд для сервиса "Конверт"
 
 ## Документация
+
 - [Сущности](./docs/entities.md)
 - [Ручки](./docs/handlers.md)
 
@@ -24,5 +25,5 @@ checkout до `origin/main`, генерирует Swagger и запускает 
 - `VPS_PORT` - SSH-порт, необязательно, по умолчанию `22`;
 - `VPS_USER` - пользователь SSH;
 - `VPS_SSH_KEY` - приватный ключ без passphrase или ключ, настроенный для
-	non-interactive использования;
+  non-interactive использования;
 - `VPS_APP_DIR` - абсолютный путь к checkout репозитория на VPS.
