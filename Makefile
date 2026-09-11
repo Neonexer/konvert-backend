@@ -61,5 +61,8 @@ konvert-run:
 konvert-deploy:
 	@docker compose up -d --build konvert-app
 
+konvert-undeploy:
+	@docker compose down konvert-app
+
 ps:
 	@docker compose ps
