@@ -1,6 +1,15 @@
 basePath: /api/v1
 definitions:
-  github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest:
+  ErrorResponse:
+    properties:
+      error:
+        example: invalid argument
+        type: string
+      message:
+        example: failed to decode and validate HTTP request
+        type: string
+    type: object
+  RegisterRequest:
     properties:
       email:
         example: john.doe@example.com
@@ -14,8 +23,11 @@ definitions:
     - email
     - password
     type: object
-  github_com_neonexer_konvert-backend_internal_core_domain.UserResponse:
+  UserResponse:
     properties:
+      created_at:
+        example: "2026-09-12T10:42:52Z"
+        type: string
       email:
         example: john.doe@example.com
         type: string
@@ -26,15 +38,6 @@ definitions:
         example: 1
         type: integer
     type: object
-  github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse:
-    properties:
-      error:
-        example: invalid argument
-        type: string
-      message:
-        example: failed to decode and validate HTTP request
-        type: string
-    type: object
 host: 127.0.0.1:5050
 info:
   contact: {}
@@ -43,6 +46,35 @@ info:
   version: "1.0"
 paths:
   /users:
+    get:
+      consumes:
+      - application/json
+      description: Получение пользователей
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно полученные пользователи
+          schema:
+            items:
+              $ref: '#/definitions/UserResponse'
+            type: array
+        "400":
+          description: Ошибка валидации данных
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Получение пользователей
+      tags:
+      - users
     post:
       consumes:
       - application/json
@@ -53,22 +85,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest'
+          $ref: '#/definitions/RegisterRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Успешно созданный пользователь
           schema:
-            $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.UserResponse'
+            $ref: '#/definitions/UserResponse'
         "400":
           description: Ошибка валидации данных
           schema:
-            $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse'
+            $ref: '#/definitions/ErrorResponse'
         "409":
           description: Конфликт
           schema:
-            $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse'
+            $ref: '#/definitions/ErrorResponse'
       summary: Создание пользователя
       tags:
       - users

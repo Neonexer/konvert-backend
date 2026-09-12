@@ -22,12 +22,12 @@ type UserResponse struct {
 	Version   int       `json:"version" example:"1"`
 	Email     string    `json:"email" example:"john.doe@example.com"`
 	CreatedAt time.Time `json:"created_at" example:"2026-09-12T10:42:52Z"`
-}
+} // @name UserResponse
 
 type RegisterRequest struct {
 	Email    string `json:"email" validate:"required,min=3,max=100,email" example:"john.doe@example.com"`
 	Password string `json:"password" validate:"required" example:"securepassword123"`
-}
+} // @name RegisterRequest
 
 type LoginRequest struct {
 	Email    string `json:"email"`

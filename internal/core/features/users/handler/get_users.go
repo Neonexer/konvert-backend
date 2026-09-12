@@ -4,11 +4,23 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "github.com/neonexer/konvert-backend/internal/core/domain"
 	core_logger "github.com/neonexer/konvert-backend/internal/core/logger"
 	core_http_response "github.com/neonexer/konvert-backend/internal/core/transport/http/response"
 	core_http_utils "github.com/neonexer/konvert-backend/internal/core/transport/http/utils"
 )
 
+// @GetUsers godoc
+// @Summary Получение пользователей
+// @Description Получение пользователей
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param limit query int false "limit"
+// @Param offset query int false "offset"
+// @Success 200 {array} domain.UserResponse "Успешно полученные пользователи"
+// @Failure 400 {object} core_http_response.ErrorResponse "Ошибка валидации данных"
+// @Router /users [get]
 func (h *UsersHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

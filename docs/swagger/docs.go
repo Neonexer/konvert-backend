@@ -16,6 +16,50 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/users": {
+            "get": {
+                "description": "Получение пользователей",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Получение пользователей",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно полученные пользователи",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/UserResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка валидации данных",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Создание нового пользователя в системе",
                 "consumes": [
@@ -35,7 +79,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest"
+                            "$ref": "#/definitions/RegisterRequest"
                         }
                     }
                 ],
@@ -43,19 +87,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Успешно созданный пользователь",
                         "schema": {
-                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.UserResponse"
+                            "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "400": {
                         "description": "Ошибка валидации данных",
                         "schema": {
-                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse"
+                            "$ref": "#/definitions/ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Конфликт",
                         "schema": {
-                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse"
+                            "$ref": "#/definitions/ErrorResponse"
                         }
                     }
                 }
@@ -63,7 +107,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest": {
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid argument"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "failed to decode and validate HTTP request"
+                }
+            }
+        },
+        "RegisterRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -82,9 +139,13 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_neonexer_konvert-backend_internal_core_domain.UserResponse": {
+        "UserResponse": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2026-09-12T10:42:52Z"
+                },
                 "email": {
                     "type": "string",
                     "example": "john.doe@example.com"
@@ -96,19 +157,6 @@ const docTemplate = `{
                 "version": {
                     "type": "integer",
                     "example": 1
-                }
-            }
-        },
-        "github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string",
-                    "example": "invalid argument"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "failed to decode and validate HTTP request"
                 }
             }
         }

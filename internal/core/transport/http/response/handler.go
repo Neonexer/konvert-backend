@@ -19,7 +19,7 @@ type HTTPResponseHandler struct {
 type ErrorResponse struct {
 	Message string `json:"message" example:"failed to decode and validate HTTP request"`
 	Error   string `json:"error" example:"invalid argument"`
-}
+} // @name ErrorResponse
 
 func NewHTTPResponseHandler(log *core_logger.Logger, w http.ResponseWriter) *HTTPResponseHandler {
 	return &HTTPResponseHandler{
