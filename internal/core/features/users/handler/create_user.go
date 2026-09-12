@@ -17,8 +17,8 @@ import (
 // @Produce json
 // @Param request body domain.RegisterRequest true "Тело запроса для регистрации пользователя"
 // @Success 201 {object} domain.UserResponse "Успешно созданный пользователь"
-	// @Failure 400 {object} core_http_response.ErrorResponse "Ошибка валидации данных"
-	// @Failure 409 {object} core_http_response.ErrorResponse "Конфликт"
+// @Failure 400 {object} core_http_response.ErrorResponse "Ошибка валидации данных"
+// @Failure 409 {object} core_http_response.ErrorResponse "Конфликт"
 // @Router /users [post]
 func (h *UsersHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
