@@ -7,10 +7,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	users_handler "github.com/neonexer/konvert-backend/internal/core/features/users/handler"
+	users_repository "github.com/neonexer/konvert-backend/internal/core/features/users/repository"
+	users_service "github.com/neonexer/konvert-backend/internal/core/features/users/service"
 	core_logger "github.com/neonexer/konvert-backend/internal/core/logger"
+	core_postgres_pool "github.com/neonexer/konvert-backend/internal/core/repository/postgres/pool"
 	core_http_middleware "github.com/neonexer/konvert-backend/internal/core/transport/http/middleware"
 	core_http_server "github.com/neonexer/konvert-backend/internal/core/transport/http/server"
-	"github.com/neonexer/konvert-backend/internal/user"
 	"go.uber.org/zap"
 
 	_ "github.com/neonexer/konvert-backend/docs/swagger"
@@ -35,14 +38,24 @@ func main() {
 	}
 	defer logger.Close()
 
-	logger.Debug("Starting konvert application")
+	logger.Debug("initializing postgres connection pool")
+	pool, err := core_postgres_pool.NewConnectionPool(
+		ctx,
+		core_postgres_pool.NewConfigMust(),
+	)
+	if err != nil {
+		logger.Fatal("failed to init postgres connection pool", zap.Error(err))
+	}
+	defer pool.Close()
 
-	usersHandler := user.NewUsersHandler(nil)
-	userRoutes := usersHandler.Routes()
 
-	apiVersionRouter := core_http_server.NewAPIVersionRouter(core_http_server.ApiVersionV1)
-	apiVersionRouter.RegisterRoutes(userRoutes...)
+	logger.Debug("initializing feature", zap.String("feature", "users"))
+	usersRepository := users_repository.NewUsersRepository(pool)
+	usersService := users_service.NewUsersService(usersRepository)
 
+	usersHandler := users_handler.NewUsersHandler(usersService)
+
+	logger.Debug("initializing HTTP server")
 	httpServer := core_http_server.NewHTTPServer(
 		core_http_server.NewConfigMust(),
 		logger,
@@ -51,6 +64,9 @@ func main() {
 		core_http_middleware.Panic(),
 		core_http_middleware.Trace(),
 	)
+	
+	apiVersionRouter := core_http_server.NewAPIVersionRouter(core_http_server.ApiVersionV1)
+	apiVersionRouter.RegisterRoutes(usersHandler.Routes()...)
 	httpServer.RegisterAPIRouters(apiVersionRouter)
 	httpServer.RegisterSwagger()
 

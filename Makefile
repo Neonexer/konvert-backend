@@ -13,7 +13,7 @@ env-down:
 env-cleanup:
 	@read -p "Очистить все volume файлы окружения? Опасность утери данных. [y/N]: " ans; \
 		if [ "$$ans" = "y" ]; then \
-			docker compose down konvert-postgres && \
+			docker compose down konvert-postgres port-forwarder && \
 			rm -rf out/pgdata && \
 			echo "Файлы окружения очищены"; \
 		else \
@@ -55,6 +55,7 @@ migrate-action:
 
 konvert-run:
 	@export LOGGER_FOLDER=$(PROJECT_ROOT)/out/logs && \
+	export POSTGRES_HOST=localhost && \
 	go mod tidy && \
 	go run cmd/server/main.go
 

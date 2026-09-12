@@ -1,5 +1,7 @@
 package core_http_middleware
 
+import "slices"
+
 import "net/http"
 
 type Middleware func(http.Handler) http.Handler
@@ -12,8 +14,8 @@ func ChainMiddleware(
 		return h
 	}
 
-	for i := len(m) - 1; i >= 0; i-- {
-		h = m[i](h)
+	for _, v := range slices.Backward(m) {
+		h = v(h)
 	}
 
 	return h

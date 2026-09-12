@@ -2,23 +2,67 @@ package core_http_response
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
+	core_errors "github.com/neonexer/konvert-backend/internal/core/errors"
 	core_logger "github.com/neonexer/konvert-backend/internal/core/logger"
 	"go.uber.org/zap"
 )
 
 type HTTPResponseHandler struct {
 	log *core_logger.Logger
-	w http.ResponseWriter
+	w   http.ResponseWriter
+}
+
+type ErrorResponse struct {
+	Message string `json:"message" example:"failed to decode and validate HTTP request"`
+	Error   string `json:"error" example:"invalid argument"`
 }
 
 func NewHTTPResponseHandler(log *core_logger.Logger, w http.ResponseWriter) *HTTPResponseHandler {
-return &HTTPResponseHandler{
-	log: log,
-	w: w,
+	return &HTTPResponseHandler{
+		log: log,
+		w:   w,
+	}
 }
+
+func (h *HTTPResponseHandler) JSONResponse(
+	responseBody any,
+	statusCode int,
+) {
+	h.w.WriteHeader(statusCode)
+
+	if err := json.NewEncoder(h.w).Encode(responseBody); err != nil {
+		h.log.Error("write HTTP response", zap.Error(err))
+	}
+}
+
+func (h *HTTPResponseHandler) ErrorResponse(err error, msg string) {
+	var (
+		statusCode int
+		logFunc    func(string, ...zap.Field)
+	)
+
+	switch {
+	case errors.Is(err, core_errors.ErrInvalidArgument):
+		statusCode = http.StatusBadRequest
+		logFunc = h.log.Warn
+	case errors.Is(err, core_errors.ErrNotFound):
+		statusCode = http.StatusNotFound
+		logFunc = h.log.Debug
+	case errors.Is(err, core_errors.ErrConflict):
+		statusCode = http.StatusConflict
+		logFunc = h.log.Warn
+	default:
+		statusCode = http.StatusInternalServerError
+		logFunc = h.log.Error
+	}
+
+	logFunc(msg, zap.Error(err))
+
+	h.errorResponse(statusCode, err, msg)
 }
 
 func (h *HTTPResponseHandler) PanicResponse(p any, msg string) {
@@ -26,14 +70,22 @@ func (h *HTTPResponseHandler) PanicResponse(p any, msg string) {
 	err := fmt.Errorf("Internal server error: %v", p)
 
 	h.log.Error(msg, zap.Error(err))
-	h.w.WriteHeader(statusCode)
 
+	h.errorResponse(statusCode, err, msg)
+}
+
+func (h *HTTPResponseHandler) errorResponse(
+	statusCode int,
+	err error,
+	msg string,
+) {
 	response := map[string]string{
 		"message": msg,
-		"error": err.Error(),
+		"error":   err.Error(),
 	}
 
-	if err := json.NewEncoder(h.w).Encode(response); err != nil {
-		h.log.Error("write HTTP response", zap.Error(err))
-	}
+	h.JSONResponse(
+		response,
+		statusCode,
+	)
 }

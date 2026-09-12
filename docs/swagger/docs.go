@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_user.RegisterRequest"
+                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest"
                         }
                     }
                 ],
@@ -43,23 +43,37 @@ const docTemplate = `{
                     "201": {
                         "description": "Успешно созданный пользователь",
                         "schema": {
-                            "$ref": "#/definitions/internal_user.UserResponse"
+                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Ошибка валидации данных",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Конфликт",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
-        "internal_user.RegisterRequest": {
+        "github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
                     "example": "john.doe@example.com"
                 },
                 "password": {
@@ -68,7 +82,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_user.UserResponse": {
+        "github_com_neonexer_konvert-backend_internal_core_domain.UserResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -76,12 +90,25 @@ const docTemplate = `{
                     "example": "john.doe@example.com"
                 },
                 "id": {
-                    "type": "string",
-                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                    "type": "integer",
+                    "example": 1
                 },
                 "version": {
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid argument"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "failed to decode and validate HTTP request"
                 }
             }
         }

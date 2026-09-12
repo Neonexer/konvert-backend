@@ -1,25 +1,39 @@
 basePath: /api/v1
 definitions:
-  internal_user.RegisterRequest:
+  github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest:
     properties:
       email:
         example: john.doe@example.com
+        maxLength: 100
+        minLength: 3
         type: string
       password:
         example: securepassword123
         type: string
+    required:
+    - email
+    - password
     type: object
-  internal_user.UserResponse:
+  github_com_neonexer_konvert-backend_internal_core_domain.UserResponse:
     properties:
       email:
         example: john.doe@example.com
         type: string
       id:
-        example: 123e4567-e89b-12d3-a456-426614174000
-        type: string
+        example: 1
+        type: integer
       version:
         example: 1
         type: integer
+    type: object
+  github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse:
+    properties:
+      error:
+        example: invalid argument
+        type: string
+      message:
+        example: failed to decode and validate HTTP request
+        type: string
     type: object
 host: 127.0.0.1:5050
 info:
@@ -39,17 +53,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_user.RegisterRequest'
+          $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.RegisterRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Успешно созданный пользователь
           schema:
-            $ref: '#/definitions/internal_user.UserResponse'
+            $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.UserResponse'
         "400":
           description: Ошибка валидации данных
-          schema: {}
+          schema:
+            $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Конфликт
+          schema:
+            $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_transport_http_response.ErrorResponse'
       summary: Создание пользователя
       tags:
       - users

@@ -32,6 +32,7 @@ func NewHTTPServer(
 		mux:        http.NewServeMux(),
 		config:     config,
 		log:        log,
+		
 		middleware: middleware,
 	}
 }

@@ -1,8 +1,10 @@
-package user
+package users_handler
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/neonexer/konvert-backend/internal/core/domain"
 	core_http_server "github.com/neonexer/konvert-backend/internal/core/transport/http/server"
 )
 
@@ -11,6 +13,10 @@ type UsersHandler struct {
 }
 
 type UsersService interface {
+	CreateUser(
+		ctx context.Context,
+		user domain.User,
+	)(domain.User, error)
 }
 
 func NewUsersHandler(usersService UsersService) *UsersHandler {
