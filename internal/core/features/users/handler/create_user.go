@@ -45,15 +45,3 @@ func (h *UsersHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	responseHandler.JSONResponse(response, http.StatusCreated)
 }
-
-func domainFromDTO(dto domain.RegisterRequest) domain.User {
-	return domain.NewUserUninitialized(dto.Email, dto.Password)
-}
-
-func dtoFromDomain(user domain.User) domain.UserResponse {
-	return domain.UserResponse{
-		Id:      user.Id,
-		Version: user.Version,
-		Email:   user.Email,
-	}
-}

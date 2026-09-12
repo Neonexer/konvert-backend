@@ -34,10 +34,11 @@ func (r *UsersRepository) CreateUser(
 	}
 
 	userDomain := domain.NewUser(
-		user.Id,
-		user.Version,
-		user.Email,
+		userModel.ID,
+		userModel.Version,
+		userModel.Email,
 		"",
+		userModel.CreatedAt,
 	)
 
 	return userDomain, nil

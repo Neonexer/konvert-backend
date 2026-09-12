@@ -5,7 +5,6 @@ services:
       dockerfile: ${PROJECT_ROOT}/cmd/server/dockerfile
     container_name: konvertapp
     environment:
-    # todo
       - HTTP_ADDR=:5050
       - HTTP_SHUTDOWN_TIMEOUT=${HTTP_SHUTDOWN_TIMEOUT}
       - POSTGRES_USER=${POSTGRES_USER}

@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"regexp"
+	"time"
 
 	core_errors "github.com/neonexer/konvert-backend/internal/core/errors"
 )
@@ -11,14 +12,16 @@ type User struct {
 	Id      int `json:"id"`
 	Version int `json:"version"`
 
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type UserResponse struct {
-	Id      int    `json:"id" example:"1"`
-	Version int    `json:"version" example:"1"`
-	Email   string `json:"email" example:"john.doe@example.com"`
+	Id        int       `json:"id" example:"1"`
+	Version   int       `json:"version" example:"1"`
+	Email     string    `json:"email" example:"john.doe@example.com"`
+	CreatedAt time.Time `json:"created_at" example:"2026-09-12T10:42:52Z"`
 }
 
 type RegisterRequest struct {
@@ -36,12 +39,14 @@ func NewUser(
 	version int,
 	email string,
 	password string,
+	createdAt time.Time,
 ) User {
 	return User{
-		Id:       id,
-		Version:  version,
-		Email:    email,
-		Password: password,
+		Id:        id,
+		Version:   version,
+		Email:     email,
+		Password:  password,
+		CreatedAt: createdAt,
 	}
 }
 
@@ -49,7 +54,7 @@ func NewUserUninitialized(
 	email string,
 	password string,
 ) User {
-	return NewUser(UninitializedID, UninitializedVersion, email, password)
+	return NewUser(UninitializedID, UninitializedVersion, email, password, time.Now())
 }
 
 func (u *User) Validate() error {
