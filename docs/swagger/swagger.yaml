@@ -45,6 +45,35 @@ info:
   title: Konvert API
   version: "1.0"
 paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Получение пользователя по ID
+      parameters:
+      - description: "127"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно полученный пользователь
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Ошибка валидации данных
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Пользователь не найден
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Получение пользователя по ID
+      tags:
+      - users
   /users:
     get:
       consumes:
