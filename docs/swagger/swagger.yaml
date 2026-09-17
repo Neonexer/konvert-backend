@@ -12,10 +12,13 @@ definitions:
   ExpenseRequest:
     properties:
       amount:
-        type: integer
+        example: 260.9
+        type: number
       category_id:
+        example: 23
         type: integer
       name:
+        example: Тофу
         type: string
     type: object
   Nullable-string:
@@ -35,12 +38,14 @@ definitions:
   ReceiptCreateRequest:
     properties:
       amount:
+        example: 2499.99
         type: number
       expenses:
         items:
           $ref: '#/definitions/ExpenseRequest'
         type: array
       name:
+        example: Чек из вкусвилла
         type: string
     type: object
   ReceiptResponse:

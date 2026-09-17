@@ -304,13 +304,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "integer"
+                    "type": "number",
+                    "example": 260.9
                 },
                 "category_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 23
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Тофу"
                 }
             }
         },
@@ -340,7 +343,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 2499.99
                 },
                 "expenses": {
                     "type": "array",
@@ -349,7 +353,8 @@ const docTemplate = `{
                     }
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Чек из вкусвилла"
                 }
             }
         },

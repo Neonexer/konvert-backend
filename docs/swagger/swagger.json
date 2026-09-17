@@ -298,13 +298,16 @@
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "integer"
+                    "type": "number",
+                    "example": 260.9
                 },
                 "category_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 23
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Тофу"
                 }
             }
         },
@@ -334,7 +337,8 @@
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 2499.99
                 },
                 "expenses": {
                     "type": "array",
@@ -343,7 +347,8 @@
                     }
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Чек из вкусвилла"
                 }
             }
         },
