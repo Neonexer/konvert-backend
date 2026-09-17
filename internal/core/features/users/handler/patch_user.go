@@ -9,7 +9,6 @@ import (
 	core_http_request "github.com/neonexer/konvert-backend/internal/core/transport/http/request"
 	core_http_response "github.com/neonexer/konvert-backend/internal/core/transport/http/response"
 	core_http_types "github.com/neonexer/konvert-backend/internal/core/transport/http/types"
-	core_http_utils "github.com/neonexer/konvert-backend/internal/core/transport/http/utils"
 )
 
 type PatchUserRequest struct {
@@ -58,7 +57,7 @@ func (h *UsersHandler) PatchUser(w http.ResponseWriter, r *http.Request) {
 	log := core_logger.FromContext(ctx)
 	responseHandler := core_http_response.NewHTTPResponseHandler(log, w)
 
-	userID, err := core_http_utils.GetIntPathValue(r, "id")
+	userID, err := core_http_request.GetIntPathValue(r, "id")
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to get userID path value")
 
