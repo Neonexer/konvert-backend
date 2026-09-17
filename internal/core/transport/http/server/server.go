@@ -29,28 +29,28 @@ func NewHTTPServer(
 	middleware ...core_http_middleware.Middleware,
 ) *HTTPServer {
 	return &HTTPServer{
-		mux:        http.NewServeMux(),
-		config:     config,
-		log:        log,
-		
+		mux:    http.NewServeMux(),
+		config: config,
+		log:    log,
+
 		middleware: middleware,
 	}
 }
 
-func (h *HTTPServer) RegisterAPIRouters(routers ...*APIVersionRouter) {
+func (s *HTTPServer) RegisterAPIRouters(routers ...*APIVersionRouter) {
 	for _, router := range routers {
 		prefix := "/api/" + string(router.apiVersion)
 
-		h.mux.Handle(
+		s.mux.Handle(
 			prefix+"/",
-			http.StripPrefix(prefix, router),
+			http.StripPrefix(prefix, router.WithMiddleware()),
 		)
 	}
 }
 
 func (s *HTTPServer) RegisterSwagger() {
 	s.mux.Handle(
-		"/swagger/", 
+		"/swagger/",
 		httpSwagger.Handler(
 			httpSwagger.URL("/swagger/doc.json"),
 		),
