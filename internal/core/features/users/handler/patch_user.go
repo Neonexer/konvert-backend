@@ -87,14 +87,6 @@ func (h *UsersHandler) PatchUser(w http.ResponseWriter, r *http.Request) {
 	response := dtoFromDomain(userDomain)
 	responseHandler.JSONResponse(response, http.StatusOK)
 
-	log.Debug(
-		fmt.Sprintf(
-			"PatchUserRequest fields:\nEmail: '%v'\nPassword: '%v'",
-			request.Email,
-			request.Password,
-		),
-	)
-
 	w.WriteHeader(http.StatusOK)
 }
 
