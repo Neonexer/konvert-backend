@@ -23,15 +23,6 @@ func (rw *ResponseWriter) WriteHeader(statusCode int) {
 	rw.statusCode = statusCode
 }
 
-// TODO:
-func (rw *ResponseWriter) Write(body []byte) (int, error) {
-	if rw.statusCode == StatusCodeUninitialized {
-		rw.WriteHeader(http.StatusOK)
-	}
-
-	return rw.ResponseWriter.Write(body)
-}
-
 func (rw *ResponseWriter) GetStatusCode() int {
 	if rw.statusCode == StatusCodeUninitialized {
 		return http.StatusOK
