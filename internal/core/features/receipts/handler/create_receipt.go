@@ -19,7 +19,7 @@ type ReceiptResponse struct {
 	Expenses []domain.Expense
 } // @name ReceiptResponse
 
-// @CreateUser godoc
+// @CreateReceipt godoc
 // @Summary Создание чека
 // @Description Создание нового чека в системе
 // @Tags receipts

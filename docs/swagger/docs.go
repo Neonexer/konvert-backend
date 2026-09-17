@@ -362,10 +362,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 2499.99
                 },
                 "created_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2026-09-12T10:42:52Z"
                 },
                 "expenses": {
                     "type": "array",
@@ -377,7 +379,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Чек из вкусвилла"
                 },
                 "user_id": {
                     "type": "integer"
@@ -431,10 +434,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 260.9
                 },
                 "category_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 23
                 },
                 "created_at": {
                     "type": "string"
@@ -443,7 +448,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Тофу"
                 },
                 "receipt_id": {
                     "type": "integer"

@@ -51,8 +51,10 @@ definitions:
   ReceiptResponse:
     properties:
       amount:
+        example: 2499.99
         type: number
       created_at:
+        example: "2026-09-12T10:42:52Z"
         type: string
       expenses:
         items:
@@ -61,6 +63,7 @@ definitions:
       id:
         type: integer
       name:
+        example: Чек из вкусвилла
         type: string
       user_id:
         type: integer
@@ -99,14 +102,17 @@ definitions:
   github_com_neonexer_konvert-backend_internal_core_domain.Expense:
     properties:
       amount:
+        example: 260.9
         type: number
       category_id:
+        example: 23
         type: integer
       created_at:
         type: string
       id:
         type: integer
       name:
+        example: Тофу
         type: string
       receipt_id:
         type: integer
