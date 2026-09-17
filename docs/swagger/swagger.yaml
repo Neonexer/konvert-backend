@@ -9,6 +9,15 @@ definitions:
         example: failed to decode and validate HTTP request
         type: string
     type: object
+  ExpenseRequest:
+    properties:
+      amount:
+        type: integer
+      category_id:
+        type: integer
+      name:
+        type: string
+    type: object
   Nullable-string:
     properties:
       set:
@@ -22,6 +31,36 @@ definitions:
         $ref: '#/definitions/Nullable-string'
       password:
         $ref: '#/definitions/Nullable-string'
+    type: object
+  ReceiptCreateRequest:
+    properties:
+      amount:
+        type: number
+      expenses:
+        items:
+          $ref: '#/definitions/ExpenseRequest'
+        type: array
+      name:
+        type: string
+    type: object
+  ReceiptResponse:
+    properties:
+      amount:
+        type: number
+      created_at:
+        type: string
+      expenses:
+        items:
+          $ref: '#/definitions/github_com_neonexer_konvert-backend_internal_core_domain.Expense'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      user_id:
+        type: integer
+      version:
+        type: integer
     type: object
   RegisterRequest:
     properties:
@@ -52,6 +91,25 @@ definitions:
         example: 1
         type: integer
     type: object
+  github_com_neonexer_konvert-backend_internal_core_domain.Expense:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      receipt_id:
+        type: integer
+      user_id:
+        type: integer
+      version:
+        type: integer
+    type: object
 host: 127.0.0.1:5050
 info:
   contact: {}
@@ -59,6 +117,36 @@ info:
   title: Konvert API
   version: "1.0"
 paths:
+  /receipts:
+    post:
+      consumes:
+      - application/json
+      description: Создание нового чека в системе
+      parameters:
+      - description: Тело запроса для регистрации пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ReceiptCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Успешно созданный чек
+          schema:
+            $ref: '#/definitions/ReceiptResponse'
+        "400":
+          description: Ошибка валидации данных
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "409":
+          description: Конфликт
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Создание чека
+      tags:
+      - receipts
   /user:
     delete:
       consumes:
