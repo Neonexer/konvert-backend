@@ -9,6 +9,20 @@ definitions:
         example: failed to decode and validate HTTP request
         type: string
     type: object
+  Nullable-string:
+    properties:
+      set:
+        type: boolean
+      value:
+        type: string
+    type: object
+  PatchUserRequest:
+    properties:
+      email:
+        $ref: '#/definitions/Nullable-string'
+      password:
+        $ref: '#/definitions/Nullable-string'
+    type: object
   RegisterRequest:
     properties:
       email:
@@ -46,6 +60,32 @@ info:
   version: "1.0"
 paths:
   /user:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление пользователя по ID
+      parameters:
+      - description: "127"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Пользователь успешно удалён
+        "400":
+          description: Ошибка валидации данных
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Пользователь не найден
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Удаление пользователя по ID
+      tags:
+      - users
     get:
       consumes:
       - application/json
@@ -102,6 +142,40 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Получение пользователей
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Обновление пользователя в системе
+      parameters:
+      - description: "127"
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Тело запроса для регистрации пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/PatchUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновленный пользователь
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Ошибка валидации данных
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "409":
+          description: Конфликт
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Обновление пользователя
       tags:
       - users
     post:

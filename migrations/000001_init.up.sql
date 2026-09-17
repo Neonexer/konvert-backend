@@ -25,7 +25,7 @@ CREATE TABLE konvert.receipts (
   amount NUMERIC(10, 2) NOT NULL CHECK(amount >= 0)
 );
 
-CREATE TABLE konvert.covers (
+CREATE TABLE konvert.categories (
   id SERIAL PRIMARY KEY,
   version BIGINT NOT NULL DEFAULT 1,
   name VARCHAR(255) NOT NULL CHECK(char_length(name) BETWEEN 2 AND 255),
@@ -43,6 +43,6 @@ CREATE TABLE konvert.expenses (
   amount NUMERIC(10, 2) NOT NULL CHECK(amount >= 0),
   receipt_id INT NOT NULL REFERENCES konvert.receipts(id) ON DELETE CASCADE,
   user_id INT NOT NULL REFERENCES konvert.users(id) ON DELETE CASCADE,
-  cover_id INT NOT NULL REFERENCES konvert.covers(id) ON DELETE CASCADE,
+  category_id INT NOT NULL REFERENCES konvert.categories(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

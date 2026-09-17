@@ -27,6 +27,12 @@ type UsersRepository interface {
 		id int,
 	) (domain.User, error)
 
+	PatchUser(
+		ctx context.Context,
+		id int,
+		user domain.User,
+	) (domain.User, error)
+
 	DeleteUser(
 		ctx context.Context,
 		id int,

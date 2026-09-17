@@ -29,6 +29,12 @@ type UsersService interface {
 		id int,
 	) (domain.User, error)
 
+	PatchUser(
+		ctx context.Context,
+		id int,
+		patch domain.UserPatch,
+	) (domain.User, error)
+
 	DeleteUser(
 		ctx context.Context,
 		id int,
@@ -57,6 +63,11 @@ func (h *UsersHandler) Routes() []core_http_server.Route {
 			Method:  http.MethodPost,
 			Path:    "/users",
 			Handler: h.CreateUser,
+		},
+		{
+			Method:  http.MethodPatch,
+			Path:    "/users/{id}",
+			Handler: h.PatchUser,
 		},
 		{
 			Method:  http.MethodDelete,

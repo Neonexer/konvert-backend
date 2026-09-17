@@ -10,23 +10,39 @@ import (
 	core_errors "github.com/neonexer/konvert-backend/internal/core/errors"
 )
 
-func (r *UsersRepository) GetUser(
+func (r *UsersRepository) PatchUser(
 	ctx context.Context,
 	id int,
+	user domain.User,
 ) (domain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OpTimeout())
 	defer cancel()
 
 	query := `
-		SELECT id, version, email, password, created_at
-		FROM konvert.users
-		WHERE id=$1;
-		`
+	UPDATE konvert.users
+	SET
+		email=$1,
+		password=$2,
+		version=version+1
+	WHERE id=$3 AND version=$4
+	RETURNING 
+		id,
+		version,
+		email,
+		password,
+		created_at;
+	`
 
-	row := r.pool.QueryRow(ctx, query, id)
+	row := r.pool.QueryRow(
+		ctx,
+		query,
+		user.Email,
+		user.Password,
+		id,
+		user.Version,
+	)
 
 	var userModel UserModel
-
 	err := row.Scan(
 		&userModel.ID,
 		&userModel.Version,
@@ -37,9 +53,9 @@ func (r *UsersRepository) GetUser(
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return domain.User{}, fmt.Errorf(
-				"user with id='%d': %w",
+				"user with id='%d' concurrently accesed: %w",
 				id,
-				core_errors.ErrNotFound,
+				core_errors.ErrConflict,
 			)
 		}
 

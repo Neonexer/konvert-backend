@@ -34,6 +34,11 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+type UserPatch struct {
+	Email    Nullable[string]
+	Password Nullable[string]
+}
+
 func NewUser(
 	id int,
 	version int,
@@ -86,6 +91,45 @@ func (u *User) Validate() error {
 			)
 		}
 	}
+
+	return nil
+}
+
+func (p *UserPatch) Validate() error {
+	if p.Email.Set && p.Email.Value == nil {
+		return fmt.Errorf("Email cannot be null: %w", core_errors.ErrInvalidArgument)
+	}
+
+	if p.Password.Set && p.Password.Value == nil {
+		return fmt.Errorf("Password cannot be null: %w", core_errors.ErrInvalidArgument)
+	}
+
+	if p.Password.Set && len([]rune(*p.Password.Value)) < 8 {
+		return fmt.Errorf("password cannot be less than 8 symbols: %w", core_errors.ErrInvalidArgument)
+	}
+
+	return nil
+}
+
+func (u *User) ApplyPatch(patch UserPatch) error {
+	if err := patch.Validate(); err != nil {
+		return fmt.Errorf("validate user patch: %w", err)
+	}
+
+	tmp := *u
+	if patch.Email.Set {
+		tmp.Email = *patch.Email.Value
+	}
+
+	if patch.Password.Set {
+		tmp.Password = *patch.Password.Value
+	}
+
+	if err := tmp.Validate(); err != nil {
+		return fmt.Errorf("validate patched user: %w", err)
+	}
+
+	*u = tmp
 
 	return nil
 }
