@@ -17,6 +17,7 @@ var (
 	LoggerContextKey = loggerContextKey{}
 )
 
+// TODO: interface logger
 type Logger struct {
 	*zap.Logger
 
