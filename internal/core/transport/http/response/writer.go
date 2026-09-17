@@ -32,9 +32,9 @@ func (rw *ResponseWriter) Write(body []byte) (int, error) {
 	return rw.ResponseWriter.Write(body)
 }
 
-func (rw *ResponseWriter) GetStatusCodeOrPanic() int {
+func (rw *ResponseWriter) GetStatusCode() int {
 	if rw.statusCode == StatusCodeUninitialized {
-		panic("no status code set")
+		return http.StatusOK
 	}
 	return rw.statusCode
 }
