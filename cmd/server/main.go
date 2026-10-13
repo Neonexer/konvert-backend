@@ -7,7 +7,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	receipts_handler "github.com/neonexer/konvert-backend/internal/core/features/receipts/handler"
 	users_handler "github.com/neonexer/konvert-backend/internal/core/features/users/handler"
 	users_repository "github.com/neonexer/konvert-backend/internal/core/features/users/repository"
 	users_service "github.com/neonexer/konvert-backend/internal/core/features/users/service"
@@ -53,9 +52,6 @@ func main() {
 	usersService := users_service.NewUsersService(usersRepository)
 	usersHandler := users_handler.NewUsersHandler(usersService)
 
-	logger.Debug("initializing feature", zap.String("feature", "receipts"))
-	receiptsHandler := receipts_handler.NewReceiptsHandler()
-
 	logger.Debug("initializing HTTP server")
 	httpServer := core_http_server.NewHTTPServer(
 		core_http_server.NewConfigMust(),
@@ -70,7 +66,6 @@ func main() {
 	apiVersionRouter := core_http_server.NewAPIVersionRouter(core_http_server.ApiVersionV1)
 
 	apiVersionRouter.RegisterRoutes(usersHandler.Routes()...)
-	apiVersionRouter.RegisterRoutes(receiptsHandler.Routes()...)
 
 	httpServer.RegisterAPIRouters(apiVersionRouter)
 	httpServer.RegisterSwagger()
