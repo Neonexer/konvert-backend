@@ -53,7 +53,7 @@ migrate-action:
 		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@konvert-postgres:5432/${POSTGRES_DB}?sslmode=disable \
 		"$(action)"
 
-konvert-run:
+run:
 	@export LOGGER_FOLDER=$(PROJECT_ROOT)/out/logs && \
 	export POSTGRES_HOST=localhost && \
 	go mod tidy && \

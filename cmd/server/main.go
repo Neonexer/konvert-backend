@@ -23,7 +23,6 @@ import (
 // @title Konvert API
 // @version 1.0
 // @description API для приложения Конверт. Для управления личными финансами
-// @host 127.0.0.1:5050
 // @BasePath /api/v1
 func main() {
 	ctx, cancel := signal.NotifyContext(

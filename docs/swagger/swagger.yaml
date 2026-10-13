@@ -121,7 +121,6 @@ definitions:
       version:
         type: integer
     type: object
-host: 127.0.0.1:5050
 info:
   contact: {}
   description: API для приложения Конверт. Для управления личными финансами
